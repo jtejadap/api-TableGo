@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/** Gestion de usuarios (crear recepcionistas/administradores). Solo ADMINISTRADOR. */
+/** Gestion de usuarios (crear recepcionistas). Solo ADMINISTRADOR. */
 @RestController
 @RequestMapping("/api/admin/usuarios")
 @PreAuthorize("hasRole('ADMINISTRADOR')")
@@ -26,8 +26,8 @@ public class AdminUserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
-        var user = userService.create(request.nombre(), request.email(), request.password(), request.role());
+    public ResponseEntity<UserResponse> createRecepcionist(@Valid @RequestBody CreateUserRequest request) {
+        var user = userService.createRecepcionist(request.nombre(), request.email(), request.password());
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
     }
 

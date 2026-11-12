@@ -1,8 +1,10 @@
 package com.tablego.api.controller;
 
+import com.tablego.api.dto.MesaDtos.MesaResponse;
 import com.tablego.api.dto.PageResponse;
 import com.tablego.api.dto.ReservaDtos.*;
 import com.tablego.api.model.EstadoReserva;
+import com.tablego.api.service.MesaService;
 import com.tablego.api.service.ReservaService;
 
 import jakarta.validation.Valid;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 public class ReservaGestionController {
 
     private final ReservaService service;
+    private final MesaService mesas;   
 
     /** Ej: /api/gestion/reservas?estado=PENDIENTE&desde=2026-11-05&hasta=2026-11-05&nombreCliente=ana */
     @GetMapping
@@ -32,6 +35,15 @@ public class ReservaGestionController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return service.listarDelRestaurante(estado, desde, hasta, nombreCliente, page, size);
+    }
+
+    @GetMapping("/mesas")
+    public PageResponse<MesaResponse> listar(
+            @RequestParam(required = false) Integer capacidadMin,
+            @RequestParam(required = false) Boolean activa,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return mesas.listar(capacidadMin, activa, page, size);
     }
 
     @PatchMapping("/{id}/estado")
